@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>touchjs</title>
+    <style type="text/css">
+    #box{
+        height:100px;
+        width:100px;
+        background:red;
+        position:absolute;
+        left:0;
+        top:0;
+    }
+    </style>
+</head>
+<body>
+    <div id="box"></div>
+</body>
+<script type="text/javascript">
+
+//PC端可以拖拽
+/*window.onload = function(){
+    var oBox = document.getElementById("box");
+
+    oBox.onmousedown = function(ev){
+        var disX = ev.clientX - this.offsetLeft;
+        var disY = ev.clientY - this.offsetTop;
+        document.onmousemove = function(ev){
+            oBox.style.left = ev.clientX - disX + "px";
+            oBox.style.top = ev.clientY - disY + "px";
+        }
+        document.onmouseup = function(){
+            document.onmousemove = document.onmouseup = null;
+        }
+        return false;
+    }
+}*/
+
+//移动端拖拽
+//document可以模拟window.onload,但是比其灵敏
+document.addEventListener("DOMContentLoaded",function(ev){
+    var oBox = document.querySelector("#box"); //抓到的元素
+
+    // document.addEventListener('touchstart',function(ev){
+    //     ev.preventDefault();
+    // },false)
+
+    oBox.addEventListener("touchstart",function(ev){
+        var disX = ev.targetTouches[0].clientX - this.offsetLeft;
+        var disY = ev.targetTouches[0].clientY - this.offsetTop;
+        document.addEventListener("touchmove",moveFn,false);
+        function moveFn(ev){
+            oBox.style.left = ev.targetTouches[0].clientX - disX + "px";
+            oBox.style.top = ev.targetTouches[0].clientY - disY + "px";
+        }
+        document.addEventListener("touchend",endFn,false);
+
+        function endFn(){
+            document.removeEventListener("touchmove",moveFn)
+            document.removeEventListener("touchend",endFn)
+        }
+        // ev.preventDefault();
+    },false)
+},false)
+</script>
+</html>
